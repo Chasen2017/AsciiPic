@@ -2,6 +2,7 @@ package com.chasen.asciipic;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -11,6 +12,8 @@ import android.text.TextPaint;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * @Author Chasen
@@ -30,7 +33,7 @@ public class PicToAsciiUitl {
      * @param context Context
      * @return 转成Ascii图片再转成Bitmap并返回
      */
-    public static Bitmap createAsciiPic(Bitmap image, Context context) {
+    public static Bitmap createAsciiPic(Bitmap bitmap, Context context) {
         // 字符串由复杂到简单
         final String base = "#8XOHLTI)i=+;:,.";
         StringBuilder text = new StringBuilder();
@@ -38,8 +41,8 @@ public class PicToAsciiUitl {
         DisplayMetrics dm = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
-        int width0 = image.getWidth();
-        int height0 = image.getHeight();
+        int width0 = bitmap.getWidth();
+        int height0 = bitmap.getHeight();
         int width1, height1;
         int scale = 7;
         if (width0 <= width / scale) {
@@ -50,11 +53,11 @@ public class PicToAsciiUitl {
             height1 = width1 * height0 / width0;
         }
         //读取图片
-        image = scale(image, width1, height1);
+        bitmap = scale(bitmap, width1, height1);
         //输出到指定文件中
-        for (int y = 0; y < image.getHeight(); y += 2) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                final int pixel = image.getPixel(x, y);
+        for (int y = 0; y < bitmap.getHeight(); y += 2) {
+            for (int x = 0; x < bitmap.getWidth(); x++) {
+                final int pixel = bitmap.getPixel(x, y);
                 final int r = (pixel & 0xff0000) >> 16, g = (pixel & 0xff00) >> 8, b = pixel & 0xff;
                 final float gray = 0.299f * r + 0.578f * g + 0.114f * b;
                 final int index = Math.round(gray * (base.length() + 1) / 255);
@@ -104,6 +107,21 @@ public class PicToAsciiUitl {
         layout.draw(canvas);
         Log.d("textAsBitmap", String.format("1:%d %d", layout.getWidth(), layout.getHeight()));
         return bitmap;
+    }
+
+    /**
+     * 压缩Bitmap
+     * @param bitmap 原始的Bitmap
+     * @return 压缩过后的Bitmap
+     */
+    public static Bitmap zipBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inSampleSize = 2;
+        Bitmap aftBm = BitmapFactory.decodeByteArray(bos.toByteArray(), 0, bos.toByteArray().length, options);
+        return aftBm;
     }
 
 }

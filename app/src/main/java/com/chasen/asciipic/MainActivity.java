@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(TAG, "path:" + path);
                 Bitmap bitmap = BitmapFactory.decodeFile(path);
                 if (bitmap != null) {
+                    bitmap = PicToAsciiUitl.zipBitmap(bitmap);
                     mCurBitmap = PicToAsciiUitl.createAsciiPic(bitmap, MainActivity.this);
                     mIm.setImageBitmap(mCurBitmap);
                 }
