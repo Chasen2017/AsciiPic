@@ -5,7 +5,7 @@
 3. 保存字符画到本地
 
 其中视频是通过截取源视频，1秒取4帧，然后再通过一帧一帧播放生成的，这个过程效率低，生成需要一些时间，建议选取30s以下的源视频；
-另，其中截取帧是利用MediaMetadataRetriever来实现的，如果有效率更高的实现，可以联系一下我，谢谢~ wechat：746973769
+另，其中截取帧是利用MediaMetadataRetriever来实现的，如果有效率更高的实现，可以联系一下我，谢谢~ wechat：746973769，email：746973769@qq.com
 
 ### 字符画效果
 ![image](https://github.com/Chasen2017/AsciiPic/blob/master/158829049841040457.jpg)
